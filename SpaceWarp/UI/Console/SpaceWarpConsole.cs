@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using BepInEx.Bootstrap;	
 using BepInEx.Logging;
-using KSP.Animation;
 using KSP.Game;
 using UitkForKsp2.API;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SpaceWarp.UI.Debug;	
+namespace SpaceWarp.UI.Console;	
 
 public sealed class SpaceWarpConsole : KerbalMonoBehaviour	
 {	
@@ -106,20 +105,9 @@ public sealed class SpaceWarpConsole : KerbalMonoBehaviour
         {
             return;
         }
-        
-        Label label = new Label(message)
-        {
-            style =
-            {
-                // Turns on word wrap
-                whiteSpace = WhiteSpace.Normal
-            }
-        };
 
-        // Parse the color from the message
-        Color logLevelColor = GetColorFromLogLevel(logLevel);
-        label.style.color = logLevelColor;
-        
+        Label label = new Label(message);
+
         // Add the label to the console output
         _consoleOutput.contentContainer.Add(label);
         
@@ -181,31 +169,31 @@ public sealed class SpaceWarpConsole : KerbalMonoBehaviour
         _toggleInfo = _container.Q<Toggle>("log-levels-toggle-info");
     }
     
-    private void filterHandler (ChangeEvent<bool> evt) => FilterMessages();
-    private void searchHandler (ChangeEvent<string> evt) => FilterMessages();
+    private void FilterHandler (ChangeEvent<bool> evt) => FilterMessages();
+    private void SearchHandler (ChangeEvent<string> evt) => FilterMessages();
 
     private void BindFunctions()
     {
-        _consoleInput.RegisterValueChangedCallback(searchHandler);
+        _consoleInput.RegisterValueChangedCallback(SearchHandler);
         
-        _toggleError.RegisterValueChangedCallback(filterHandler);
-        _toggleWarning.RegisterValueChangedCallback(filterHandler);
-        _toggleFatal.RegisterValueChangedCallback(filterHandler);
-        _toggleDebug.RegisterValueChangedCallback(filterHandler);
-        _toggleMessage.RegisterValueChangedCallback(filterHandler);
-        _toggleInfo.RegisterValueChangedCallback(filterHandler);
+        _toggleError.RegisterValueChangedCallback(FilterHandler);
+        _toggleWarning.RegisterValueChangedCallback(FilterHandler);
+        _toggleFatal.RegisterValueChangedCallback(FilterHandler);
+        _toggleDebug.RegisterValueChangedCallback(FilterHandler);
+        _toggleMessage.RegisterValueChangedCallback(FilterHandler);
+        _toggleInfo.RegisterValueChangedCallback(FilterHandler);
     }
 
     private void UnbindFunctions()
     {
-        _consoleOutput.UnregisterCallback<ChangeEvent<string>>(searchHandler);
+        _consoleOutput.UnregisterCallback<ChangeEvent<string>>(SearchHandler);
         
-        _toggleError.UnregisterValueChangedCallback(filterHandler);
-        _toggleWarning.UnregisterValueChangedCallback(filterHandler);
-        _toggleFatal.UnregisterValueChangedCallback(filterHandler);
-        _toggleDebug.UnregisterValueChangedCallback(filterHandler);
-        _toggleMessage.UnregisterValueChangedCallback(filterHandler);
-        _toggleInfo.UnregisterValueChangedCallback(filterHandler);
+        _toggleError.UnregisterValueChangedCallback(FilterHandler);
+        _toggleWarning.UnregisterValueChangedCallback(FilterHandler);
+        _toggleFatal.UnregisterValueChangedCallback(FilterHandler);
+        _toggleDebug.UnregisterValueChangedCallback(FilterHandler);
+        _toggleMessage.UnregisterValueChangedCallback(FilterHandler);
+        _toggleInfo.UnregisterValueChangedCallback(FilterHandler);
     }
 
     private void SetDefaults()
@@ -322,6 +310,9 @@ public sealed class SpaceWarpConsole : KerbalMonoBehaviour
         }
         catch (Exception ex)
         {
+            // dw about this, it prevents warning
+            _ = ex;
+            
             return 3;
         }
 
@@ -329,25 +320,26 @@ public sealed class SpaceWarpConsole : KerbalMonoBehaviour
         return 3;
     }
 
+    
+    // ReSharper disable once UnusedMember.Local
     private Color GetColorFromLogLevel(int loglevel)
     {
-        switch (loglevel)
+        return loglevel switch
         {
-            case 0: // Fatal
-                return Color.red;
-            case 1: // Error
-                return _spaceWarpPluginInstance.ConfigErrorColor.Value;
-            case 2: // Warning
-                return _spaceWarpPluginInstance.ConfigWarningColor.Value;
-            case 3: // Message
-                return _spaceWarpPluginInstance.ConfigMessageColor.Value;
-            case 4: // Info
-                return _spaceWarpPluginInstance.ConfigInfoColor.Value;
-            case 5: // Debug
-                return _spaceWarpPluginInstance.ConfigDebugColor.Value;
-            default:
-                return _spaceWarpPluginInstance.ConfigMessageColor.Value;
-        }
+            0 => // Fatal
+                Color.red,
+            1 => // Error
+                _spaceWarpPluginInstance.ConfigErrorColor.Value,
+            2 => // Warning
+                _spaceWarpPluginInstance.ConfigWarningColor.Value,
+            3 => // Message
+                _spaceWarpPluginInstance.ConfigMessageColor.Value,
+            4 => // Info
+                _spaceWarpPluginInstance.ConfigInfoColor.Value,
+            5 => // Debug
+                _spaceWarpPluginInstance.ConfigDebugColor.Value,
+            _ => _spaceWarpPluginInstance.ConfigMessageColor.Value
+        };
     }
 
     private void ToggleAutoScroll()

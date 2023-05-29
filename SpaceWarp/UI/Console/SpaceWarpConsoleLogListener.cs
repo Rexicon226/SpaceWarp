@@ -2,7 +2,7 @@
 using System.Collections.Generic;	
 using BepInEx.Logging;	
 
-namespace SpaceWarp.UI.Debug;	
+namespace SpaceWarp.UI.Console;	
 
 public sealed class SpaceWarpConsoleLogListener : ILogListener	
 {	

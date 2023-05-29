@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>$(SpaceWarpVersion)</Version>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="UnityEngine.Modules" Version="2020.3.33.1" />
+        <PackageReference Include="UnityEngine.UITK" Version="2020.3.33.1" />
+    </ItemGroup>
+
+</Project>
