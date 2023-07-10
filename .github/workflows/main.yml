@@ -10,7 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    
+    strategy:
+      matrix:
+        run_args: ["" , "-r"]
     
     steps:
       - name: Check Out Repository
