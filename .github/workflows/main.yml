@@ -2,15 +2,16 @@ name: SpaceWarp Builder
 
 on:
   push:
-    branches:
-      - main  # Replace with your desired branch name
+    branches: [ "main", "dev" ]
   pull_request:
-    branches:
-      - main  # Replace with your desired branch name
+    branches: [ "main", "dev" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    
+    
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v2
@@ -19,13 +20,18 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
+          
       - name: Run Python Script
-        run: sudo python builder.py # I'm sure running it in sudo will cause NO issues what so ever.
+        run: sudo python builder.py ${{ matrix.run_args }} 
+        # I'm sure running it in sudo will cause NO issues what so ever.
         
       - name: Find Debug Zip
         id: find-zip
         run: echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
+        # Yeah... this is a little cursed I can't lie.
+        
+      - name: Debug
+        run: ls build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
