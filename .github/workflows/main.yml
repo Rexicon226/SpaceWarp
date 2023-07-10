@@ -1,0 +1,24 @@
+name: SpaceWarp Builder
+
+on:
+  push:
+    branches:
+      - main  # Replace with your desired branch name
+  pull_request:
+    branches:
+      - main  # Replace with your desired branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Run Python Script
+        run: python builder.py
