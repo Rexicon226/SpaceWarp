@@ -23,9 +23,13 @@ jobs:
       - name: Run Python Script
         run: sudo python builder.py # I'm sure running it in sudo will cause NO issues what so ever.
         
-      - name: Debug
-        run: ls
-        
-      - name: Debug 2
-        run: ls build
+      - name: Find Debug Zip
+        id: find-zip
+        run: echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: SpaceWarp Artifact
+          path: ${{ steps.find-zip.outputs.zip }}
         
