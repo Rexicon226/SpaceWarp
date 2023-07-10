@@ -21,4 +21,4 @@ jobs:
           python-version: 3.9
 
       - name: Run Python Script
-        run: python builder.py
+        run: sudo python builder.py # I'm sure running it in sudo will cause NO issues what so ever.
