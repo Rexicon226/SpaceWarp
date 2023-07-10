@@ -4,18 +4,28 @@ SpaceWarp/ModList/DisableAll,Text,,Disable All,Desativar todos
 SpaceWarp/ModList/RevertChanges,Text,,Revert Changes,Reverter alterações
 SpaceWarp/ModList/ChangesDetected,Text,,"{0} changes detected, please restart to apply them","{0} alterações detetadas, porfavor reinicie o jogo"
 SpaceWarp/ModList/Header,Text,,spacewarp.modlist,spacewarp.modlist
-SpaceWarp/ModList/SpaceWarpMods,Text,,SpaceWarp Mods,Mods de SpaceWarp
-SpaceWarp/ModList/UnmanagedMods,Text,,Unmanaged Mods,Mods externos
-SpaceWarp/ModList/DisabledMods,Text,,Disabled Mods,DisabledMods
+SpaceWarp/ModList/EnabledMods,Text,,Enabled Mods,Mods ativos
+SpaceWarp/ModList/ErroredMods,Text,,Errored Mods,Mods com erros
+SpaceWarp/ModList/DisabledMods,Text,,Disabled Mods,Mods desativados
 SpaceWarp/ModList/Version,Text,,Version,Versão
 SpaceWarp/ModList/Author,Text,,Author,Autor
-SpaceWarp/ModList/outdated,Text,,outdated,Desatualizado
 SpaceWarp/ModList/Source,Text,,Source,Fonte
 SpaceWarp/ModList/Description,Text,,Description,Descrição
 SpaceWarp/ModList/KSP2Version,Text,,KSP2 Version,Versão do jogo
 SpaceWarp/ModList/Dependencies,Text,,Dependencies,Dependências
-SpaceWarp/ModList/OpenConfigManager,Text,,Open Configuration Manager,Abrir gestor de configurações
-SpaceWarp/ModList/unsupported,Text,,unsupported,Não suportado
+SpaceWarp/ModList/outdated,Text,,outdated,desatualizado
+SpaceWarp/ModList/unsupported,Text,,unsupported,não suportado
+SpaceWarp/ModList/disabled,Text,,disabled,desativado
+SpaceWarp/ModList/OpenConfigurationManager,Text,,Open Configuration Manager,Abrir gestor de configurações
+SpaceWarp/ModList/OpenModsFolder,Text,,Open Mods Folder,Abrir pasta de mods
+SpaceWarp/ModList/mismatched,Text,,Mismatched,Não corresponde com o swinfo
+SpaceWarp/ModList/baddirectory,Text,,Bad Directory,Problemas no diretorio
+SpaceWarp/ModList/missingswinfo,Text,,Missing SW Info,Não possui um swinfo
+SpaceWarp/ModList/MissingDependency,Text,,Dependency is missing,Esta dependência não está presente
+SpaceWarp/ModList/ErroredDependency,Text,,Dependency had an error while loading,Esta dependência teve um erro durante o loading
+SpaceWarp/ModList/DisabledDependency,Text,,Dependency is disabled,Esta dependência esta desativada
+SpaceWarp/ModList/UnspecifiedDependency,Text,,Dependency was not specified in SW info,Esta dependência não está presente no swinfo
+SpaceWarp/ModList/UnsupportedDependency,Text,,Dependency is of an unsupported version,Esta dependência é de uma versão nao suportada
 SpaceWarp/Mods,Text,,Mods,Mods
 SpaceWarp,Text,,Space Warp,Space Warp
 SpaceWarp/VersionChecking,Text,,Allow Space Warp to check versions for mods over the network?,Deixar SpaceWarp verificar a versão dos mods na internet?
