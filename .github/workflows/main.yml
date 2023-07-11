@@ -42,6 +42,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.find-zip.outputs.artifact_name }}
+          name: Test Artifact
           path: ${{ steps.find-zip.outputs.zip }}
         
