@@ -13,6 +13,8 @@ jobs:
     strategy:
       matrix:
         run_args: ["" , "-r"]
+        zip_pattern: ["SpaceWarp-Debug*.zip", "SpaceWarp-Release*.zip"]
+        artifact_name: ["SpaceWarpDebug", "SpaceWarpRelease"]
     
     steps:
       - name: Check Out Repository
@@ -29,15 +31,12 @@ jobs:
         
       - name: Find Debug Zip
         id: find-zip
-        run: echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
+        run: echo "::set-output name=zip::$(ls -1 build/${{ matrix.zip_pattern }} | head -n 1)"
         # Yeah... this is a little cursed I can't lie.
-        
-      - name: Debug
-        run: ls build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: SpaceWarp Artifact
+          name: ${{ artifact_name }}
           path: ${{ steps.find-zip.outputs.zip }}
         
