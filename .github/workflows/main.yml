@@ -30,7 +30,7 @@ jobs:
       - name: Find Zip
         id: find-zip
         run: |
-          if [[ ${{ matrix.run_args }} == "-r" ]]; then
+          if [ "${{ matrix.run_args }}" == "-r" ]; then
             echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
             echo "::set-output name=artifact_name::$(SpaceWarpRelease)"
           else
