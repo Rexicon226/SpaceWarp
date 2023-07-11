@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         run_args: ["" , "-r"]
-        zip_pattern: ["SpaceWarp-Debug*.zip", "SpaceWarp-Release*.zip"]
-        artifact_name: ["SpaceWarpDebug", "SpaceWarpRelease"]
     
     steps:
       - name: Check Out Repository
@@ -29,14 +27,21 @@ jobs:
         run: sudo python builder.py ${{ matrix.run_args }} 
         # I'm sure running it in sudo will cause NO issues what so ever.
         
-      - name: Find Debug Zip
+      - name: Find Zip
         id: find-zip
-        run: echo "::set-output name=zip::$(ls -1 build/${{ matrix.zip_pattern }} | head -n 1)"
-        # Yeah... this is a little cursed I can't lie.
+        run: |
+          if [[ ${{ matrix.run_args }} == "-r" ]]; then
+            echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
+            echo "::set-output name=artifact_name::$(SpaceWarpRelease)"
+          else
+            echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
+            echo "::set-output name=artifact_name::$(SpaceWarpDebug)"
+          fi
+        # Least cursed Sinon code.
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.artifact_name }}
+          name: ${{ steps.find-zip.outputs.artifact_name }}
           path: ${{ steps.find-zip.outputs.zip }}
         
