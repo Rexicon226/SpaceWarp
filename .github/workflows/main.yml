@@ -32,16 +32,16 @@ jobs:
         run: |
           if [ "${{ matrix.run_args }}" == "-r" ]; then
             echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
-            echo "::set-output name=artifact_name::$(SpaceWarpRelease)"
+            echo "::set-output name=artifact_name::SpaceWarpRelease"
           else
             echo "::set-output name=zip::$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
-            echo "::set-output name=artifact_name::$(SpaceWarpDebug)"
+            echo "::set-output name=artifact_name::SpaceWarpDebug"
           fi
         # Least cursed Sinon code.
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Test Artifact
+          name: ${{ steps.find-zip.outputs.artifact_name }}
           path: ${{ steps.find-zip.outputs.zip }}
         
