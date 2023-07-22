@@ -35,8 +35,9 @@ jobs:
       - name: Create Alpha Release
         id: create_release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          token: ${{ secrets.ACTIONS_TOKEN }}
           tag_name: "spacewarp-${{ steps.get_version.outputs.version }}-alpha"
           release_name: "Alpha Release - ${{ steps.get_version.outputs.version }}"
           draft: false
