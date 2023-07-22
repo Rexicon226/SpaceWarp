@@ -1,0 +1,25 @@
+name: Nightly Builds and Alpha Releases
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Get Latest Version
+        id: get_version
+        run: |
+          latest_version=$(git describe --tags --match "spacewarp-*" --abbrev=0)
+          version_number=$(echo $latest_version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
+          echo "::set-output name=version::$version_number"
