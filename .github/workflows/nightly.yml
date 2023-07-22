@@ -53,8 +53,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          tag_name: "spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD | tr -cd '[:alnum:].-' | tr '[:upper:]' '[:lower:]')-alpha"
-          release_name: "Alpha Release - -${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD | tr -cd '[:alnum:].-' | tr '[:upper:]' '[:lower:]'"
+          tag_name: "spacewarp-alpha"
+          release_name: "Alpha Release"
           draft: false
           prerelease: true
           body: |
