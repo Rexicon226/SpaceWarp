@@ -27,4 +27,16 @@ jobs:
         run: |
           latest_version=$(git describe --tags --match "spacewarp-*" --abbrev=0)
           version_number=$(echo $latest_version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
-          echo $version_number
+          echo "$version_number" >> $GITHUB_ENV
+          
+      - name: Run Python Script
+        run: sudo python builder.py -r
+
+      - name: Create Alpha Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: "spacewarp-${{ env.version_number }}-alpha"
+          release_name: "Alpha Release - ${{ env.version_number }}"
+          draft: false
+          prerelease: true
