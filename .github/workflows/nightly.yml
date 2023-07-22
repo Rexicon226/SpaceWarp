@@ -16,6 +16,12 @@ jobs:
 
       - name: List Tags
         run: git tag
+        
+      - name: Get Changelog
+        id: changelog
+        run: |
+          changelog=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)
+          echo "CHANGELOG=$changelog" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -60,7 +66,7 @@ jobs:
           body: |
             ## Changelog
 
-            $(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)
+            ${{ env.CHANGELOG }}
   
       - name: Upload Artifact to Release
         uses: actions/upload-release-asset@v1
