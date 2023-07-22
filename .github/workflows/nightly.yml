@@ -43,6 +43,9 @@ jobs:
         with:
           name: ${{ env.artifact_name }}
           path: ${{ env.zip }}
+          
+      - name: Debug
+        run: echo $(spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD | tr -cd '[:alnum:].-' | tr '[:upper:]' '[:lower:]')-alpha)
 
       - name: Create Alpha Release
         id: create_release
