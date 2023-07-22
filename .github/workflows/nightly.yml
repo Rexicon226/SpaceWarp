@@ -2,7 +2,7 @@ name: Nightly Builds and Alpha Releases
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # Will make this a chron job on release.
 
 jobs:
   build_and_release:
@@ -17,20 +17,6 @@ jobs:
       - name: List Tags
         run: git tag
         
-      - name: Get Changelog
-        id: changelog
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/:owner/:repo/compare/:base...:head
-          base: $(git describe --tags --abbrev=0)
-          head: HEAD
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
-
-      - name: Extract Changelog
-        run: |
-          echo "CHANGELOG=$(echo '${{ steps.changelog.outputs.data.commits | map('message') | join('\n') }}')" >> $GITHUB_ENV
-
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
@@ -57,9 +43,6 @@ jobs:
         with:
           name: ${{ env.artifact_name }}
           path: ${{ env.zip }}
-          
-      - name: Debug
-        run: echo $(spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD | tr -cd '[:alnum:].-' | tr '[:upper:]' '[:lower:]')-alpha)
 
       - name: Create Alpha Release
         id: create_release
@@ -67,14 +50,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          tag_name: "spacewarp-alpha"
-          release_name: "Alpha Release"
+          tag_name: "spacewarp-${{ env.artifact_name }}"
+          release_name: "SpaceWarp ${{ env.VERSION_NUMBER }}-(commit hash)"
           draft: false
           prerelease: true
           body: |
             ## Changelog
 
-            ${{ env.CHANGELOG }}
+            Add auto-generated changelog
   
       - name: Upload Artifact to Release
         uses: actions/upload-release-asset@v1
