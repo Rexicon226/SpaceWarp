@@ -28,7 +28,6 @@ jobs:
           latest_version=$(git describe --tags --match "spacewarp-*" --abbrev=0)
           version_number=$(echo $latest_version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
           echo "::set-output name=version::$version_number"
-
       - name: Run Python Script
         run: sudo python builder.py -r
 
@@ -37,12 +36,12 @@ jobs:
         run: |
           echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
           echo "artifact_name=SpaceWarpRelease"
-
+          echo "::set-output name=artifact_path::build/SpaceWarp-Release-0171271.zip"
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.find-zip.outputs.artifact_name }}
-          path: ${{ steps.find-zip.outputs.zip }}
+          path: ${{ steps.find-zip.outputs.artifact_path }}
 
       - name: Create Alpha Release
         id: create_release
