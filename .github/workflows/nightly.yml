@@ -32,6 +32,23 @@ jobs:
       - name: Run Python Script
         run: sudo python builder.py -r
 
+      - name: Find Zip
+        id: find-zip
+        run: |
+          if [ "${{ matrix.run_args }}" == "-r" ]; then
+            echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
+            echo "artifact_name=SpaceWarpRelease"
+          else
+            echo "zip=$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
+            echo "artifact_name=SpaceWarpDebug"
+          fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.find-zip.outputs.artifact_name }}
+          path: ${{ steps.find-zip.outputs.zip }}
+
       - name: Create Alpha Release
         id: create_release
         uses: actions/create-release@v1
