@@ -35,13 +35,8 @@ jobs:
       - name: Find Zip
         id: find-zip
         run: |
-          if [ "${{ matrix.run_args }}" == "-r" ]; then
-            echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
-            echo "artifact_name=SpaceWarpRelease"
-          else
-            echo "zip=$(ls -1 build/SpaceWarp-Debug*.zip | head -n 1)"
-            echo "artifact_name=SpaceWarpDebug"
-          fi
+          echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
+          echo "artifact_name=SpaceWarpRelease"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
