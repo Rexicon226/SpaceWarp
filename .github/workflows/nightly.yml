@@ -36,6 +36,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
           tag_name: "spacewarp-${{ steps.get_version.outputs.version }}-alpha"
           release_name: "Alpha Release - ${{ steps.get_version.outputs.version }}"
           draft: false
