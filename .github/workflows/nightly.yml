@@ -57,10 +57,11 @@ jobs:
 
       - name: Upload Artifact to Release
         uses: actions/upload-release-asset@v1
+        id: upload-release-asset
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.zip }}
           asset_name: ${{ env.artifact_name }}
-          asset_content_type: application/gzip
+          asset_content_type: application/zip
