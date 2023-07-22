@@ -19,9 +19,17 @@ jobs:
         
       - name: Get Changelog
         id: changelog
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/:owner/:repo/compare/:base...:head
+          base: $(git describe --tags --abbrev=0)
+          head: HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+
+      - name: Extract Changelog
         run: |
-          changelog=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)
-          echo "CHANGELOG=$changelog" >> $GITHUB_ENV
+          echo "CHANGELOG=$(echo '${{ steps.changelog.outputs.data.commits | map('message') | join('\n') }}')" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v3
