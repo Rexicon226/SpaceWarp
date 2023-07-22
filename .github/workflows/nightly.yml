@@ -34,9 +34,9 @@ jobs:
       - name: Find Zip
         id: find-zip
         run: |
-          echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
           echo "artifact_name=SpaceWarpRelease"
-          echo "::set-output name=artifact_path::build/SpaceWarp-Release-0171271.zip"
+          echo "::set-output name=artifact_path::$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)"
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
