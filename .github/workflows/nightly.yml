@@ -1,8 +1,9 @@
 name: Nightly Builds and Alpha Releases
 
 on:
+  repository_dispatch:
   schedule:
-    - cron: '*/5 * * * *' # Run every 5 minutes
+    - cron: '0 0 * * *' # Run at midnight.
 
 jobs:
   build_and_release:
