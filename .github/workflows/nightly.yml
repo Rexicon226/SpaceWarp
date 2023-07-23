@@ -57,7 +57,7 @@ jobs:
         run: |
           echo "tag_name=spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "release_name=SpaceWarp-${{ env.VERSION_NUMBER }} $(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "release_body=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)" >> $GITHUB_ENV
+        # echo "release_body=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)" >> $GITHUB_ENV
 
       - name: Create Alpha Release
         if: ${{ env.HAS_NEW_COMMITS }} == 'true'
@@ -73,7 +73,7 @@ jobs:
           body: |
             ## Changelog
 
-            ${{ env.release_body }}
+            test
 
       - name: Upload Artifact to Release
         if:  ${{ env.HAS_NEW_COMMITS }} == 'true'
