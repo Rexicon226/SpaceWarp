@@ -25,7 +25,7 @@ jobs:
       - name: Get Latest Version
         id: get_version
         run: |
-          latest_version=$(git describe --tags --match "spacewarp-*" --abbrev=0)
+          latest_version=$(git describe --tags --match "spacewarp*" --abbrev=0)
           version_number=$(echo "$latest_version" | cut -d'-' -f1)
           echo "VERSION_NUMBER=$version_number" >> $GITHUB_ENV
 
