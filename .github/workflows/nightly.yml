@@ -49,8 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          tag_name: "spacewarp-${{ env.VERSION_NUMBER }}-commit-hash"
-          release_name: "SpaceWarp ${{ env.VERSION_NUMBER }}-commit hash"
+          tag_name: "spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)"
+          release_name: "SpaceWarp ${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)"
           draft: false
           prerelease: true
           body: |
