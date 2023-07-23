@@ -26,12 +26,8 @@ jobs:
         id: get_version
         run: |
           version_number=$(echo $(git describe --tags --match "spacewarp*" --abbrev=0) | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
-          if [ -z "$version_number" ]; then
-            echo "VERSION_NUMBER=0.0.0" >> $GITHUB_ENV
-          else
-            echo "VERSION_NUMBER=$version_number" >> $GITHUB_ENV
-          fi
-
+          echo "VERSION_NUMBER=$version_number" >> $GITHUB_ENV
+          
       - name: Run Python Script
         run: sudo python builder.py -r
 
@@ -53,8 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          tag_name: "spacewarp-test-commit-hash"
-          release_name: "SpaceWarp test-commit hash"
+          tag_name: "spacewarp-${{ env.VERSION_NUMBER }}-commit-hash"
+          release_name: "SpaceWarp ${{ env.VERSION_NUMBER }}-commit hash"
           draft: false
           prerelease: true
           body: |
