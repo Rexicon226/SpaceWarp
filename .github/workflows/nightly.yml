@@ -46,7 +46,7 @@ jobs:
       - name: Setup Release Strings
         run: |
           echo "tag_name=spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo ${{ env.tag_name }}
+          echo "release_name=SpaceWarp-${{ env.VERSION_NUMBER }} $(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Create Alpha Release
         id: create_release
@@ -55,7 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
           tag_name: ${{ env.tag_name }}
-          release_name: "SpaceWarp ${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)"
+          release_name: ${{ env.release_name }}
           draft: false
           prerelease: true
           body: |
