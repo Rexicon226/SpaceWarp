@@ -46,13 +46,6 @@ jobs:
           echo "artifact_name=SpaceWarpRelease.zip" >> $GITHUB_ENV
           echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)" >> $GITHUB_ENV
 
-      - name: Upload Artifact
-        if: steps.check_commits.outputs.HAS_NEW_COMMITS == 'true'
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.artifact_name }}
-          path: ${{ env.zip }}
-
       - name: Setup Release Strings
         run: |
           echo "tag_name=spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
