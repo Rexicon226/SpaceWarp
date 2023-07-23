@@ -43,10 +43,10 @@ jobs:
           name: ${{ env.artifact_name }}
           path: ${{ env.zip }}
           
-      - name: Debug
+      - name: Setup Release Strings
         run: |
-          echo spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)
-          echo SpaceWarp ${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)
+          echo "tag_name=$(spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD))" >> $GITHUB_ENV
+          echo ${{ env.tag_name }}
 
       - name: Create Alpha Release
         id: create_release
