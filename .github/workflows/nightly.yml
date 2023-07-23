@@ -25,8 +25,7 @@ jobs:
       - name: Get Latest Version
         id: get_version
         run: |
-          latest_version=$(git describe --tags --match "spacewarp*" --abbrev=0 2>/dev/null || echo "")
-          version_number=$(echo "$latest_version" | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
+          version_number=$(echo $(git describe --tags --match "spacewarp*" --abbrev=0) | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
           if [ -z "$version_number" ]; then
             echo "VERSION_NUMBER=0.0.0" >> $GITHUB_ENV
           else
