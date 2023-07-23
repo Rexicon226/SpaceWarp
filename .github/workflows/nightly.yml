@@ -2,8 +2,6 @@ name: Nightly Builds and Alpha Releases
 
 on:
   repository_dispatch:
-  schedule:
-    - cron: '0 0 * * *' # Run at midnight.
 
 jobs:
   build_and_release:
@@ -62,7 +60,7 @@ jobs:
           echo "release_body=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)" >> $GITHUB_ENV
 
       - name: Create Alpha Release
-        if: steps.check_commits.outputs.HAS_NEW_COMMITS == 'true'
+        if: ${{ env.HAS_NEW_COMMITS }} == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -78,7 +76,7 @@ jobs:
             ${{ env.release_body }}
 
       - name: Upload Artifact to Release
-        if: steps.check_commits.outputs.HAS_NEW_COMMITS == 'true'
+        if:  ${{ env.HAS_NEW_COMMITS }} == 'true'
         uses: actions/upload-release-asset@v1
         id: upload-release-asset
         env:
