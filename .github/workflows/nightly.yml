@@ -53,8 +53,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          tag_name: "spacewarp-test-(commit hash)"
-          release_name: "SpaceWarp test-(commit hash)"
+          tag_name: "spacewarp-test-commit-hash"
+          release_name: "SpaceWarp test-commit hash"
           draft: false
           prerelease: true
           body: |
