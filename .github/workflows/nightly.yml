@@ -1,8 +1,8 @@
 name: Nightly Builds and Alpha Releases
 
 on:
-  push:
-    branches: [ "main" ] # Will make this a chron job on release.
+  schedule:
+    - cron: '*/5 * * * *' # Run every 5 minutes
 
 jobs:
   build_and_release:
@@ -16,7 +16,7 @@ jobs:
 
       - name: List Tags
         run: git tag
-        
+
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
@@ -25,9 +25,19 @@ jobs:
       - name: Get Latest Version
         id: get_version
         run: |
-          version_number=$(echo $(git describe --tags --match "spacewarp*" --abbrev=0) | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
+          version_number=$(git describe --tags --match "spacewarp*" --abbrev=0 | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
           echo "VERSION_NUMBER=$version_number" >> $GITHUB_ENV
-          
+
+      - name: Check for New Commits
+        id: check_commits
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0)
+          if git log "$latest_tag"..HEAD >/dev/null 2>&1; then
+            echo "HAS_NEW_COMMITS=true" >> $GITHUB_ENV
+          else
+            echo "HAS_NEW_COMMITS=false" >> $GITHUB_ENV
+          fi
+
       - name: Run Python Script
         run: sudo python builder.py -r
 
@@ -38,13 +48,12 @@ jobs:
           echo "zip=$(ls -1 build/SpaceWarp-Release*.zip | head -n 1)" >> $GITHUB_ENV
 
       - name: Upload Artifact
+        if: steps.check_commits.outputs.HAS_NEW_COMMITS == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.artifact_name }}
           path: ${{ env.zip }}
-          
-      # The tag and release names need to be formed before the actual action, because of a "malformed string"
-      # error that kept happening.
+
       - name: Setup Release Strings
         run: |
           echo "tag_name=spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
@@ -52,6 +61,7 @@ jobs:
           echo "release_body=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)" >> $GITHUB_ENV
 
       - name: Create Alpha Release
+        if: steps.check_commits.outputs.HAS_NEW_COMMITS == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -65,8 +75,9 @@ jobs:
             ## Changelog
 
             ${{ env.release_body }}
-  
+
       - name: Upload Artifact to Release
+        if: steps.check_commits.outputs.HAS_NEW_COMMITS == 'true'
         uses: actions/upload-release-asset@v1
         id: upload-release-asset
         env:
