@@ -43,10 +43,13 @@ jobs:
           name: ${{ env.artifact_name }}
           path: ${{ env.zip }}
           
+      # The tag and release names need to be formed before the actual action, because of a "malformed string"
+      # error that kept happening.
       - name: Setup Release Strings
         run: |
           echo "tag_name=spacewarp-${{ env.VERSION_NUMBER }}-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "release_name=SpaceWarp-${{ env.VERSION_NUMBER }} $(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "release_body=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges)" >> $GITHUB_ENV
 
       - name: Create Alpha Release
         id: create_release
@@ -61,7 +64,7 @@ jobs:
           body: |
             ## Changelog
 
-            Add auto-generated changelog
+            ${{ env.release_body }}
   
       - name: Upload Artifact to Release
         uses: actions/upload-release-asset@v1
