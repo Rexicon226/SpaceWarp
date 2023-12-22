@@ -28,16 +28,18 @@ jobs:
         run: |
           version=$(jq -r '.version' plugin_template/BepInEx/plugins/SpaceWarp/swinfo.json)
           echo "Version is $version"
-          echo "::set-output name=version::$version"
+          echo "artifact_name=spacewarp-release-$version.zip" >> $GITHUB_ENV
+          echo "zip=$(ls -1 dist/SpaceWarp-*.zip | head -n 1)" >> $GITHUB_ENV
+          echo "upload_url=$(wget -qO- https://api.github.com/repos/$GITHUB_REPOSITORY/releases | jq '.[0].upload_url' | tr -d \")" >> $GITHUB_ENV
  
       - name: Upload Zip
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: $(wget -qO- https://api.github.com/repos/$GITHUB_REPOSITORY/releases | jq '.[0].upload_url' | tr -d \")
-          asset_path: $(ls -1 dist/SpaceWarp-*.zip | head -n 1)
-          asset_name: spacewarp-release-${{ steps.get-version.outputs.version }}.zip
+          upload_url: ${{ env.upload_url }}
+          asset_path: ${{ env.zip }}
+          asset_name: ${{ env.artifact_name }}
           asset_content_type: application/zip
           
           
