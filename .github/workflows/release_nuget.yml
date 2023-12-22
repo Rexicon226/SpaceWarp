@@ -29,45 +29,15 @@ jobs:
           version=$(jq -r '.version' plugin_template/BepInEx/plugins/SpaceWarp/swinfo.json)
           echo "Version is $version"
           echo "::set-output name=version::$version"
-
-      - name: Check if version exists
-        id: check-version
-        run: |
-          version=${{ steps.get-version.outputs.version }}
-          response=$(curl -s "https://nuget.spacewarp.org/v3/search?q=SpaceWarp")
-          exists=$(echo "$response" | jq -r --arg id "SpaceWarp" --arg version "$version" '.data[] | select(.id == $id) | .versions[] | select(.version == $version) | .version')
-          if [ "$exists" == "$version" ]; then
-            echo "Version $version already exists in the NuGet repository"
-            exit 1
-          else
-            echo "Version $version does not exist in the NuGet repository"
-            echo "::set-output name=should_publish::true"
-          fi
-
-      - name: Publish NuGet package
-        if: steps.check-version.outputs.should_publish == 'true'
-        run: |
-          nupkg_path=$(ls -1 nuget/SpaceWarp.*.nupkg | head -n 1)
-          dotnet nuget push "$nupkg_path" -s https://nuget.spacewarp.org/v3/index.json -k ${{ secrets.NUGET_SERVER_KEY }}
-
-      - name: Get Release Data
-        id: release-data
-        run: |
-          URL=$(wget -qO- https://api.github.com/repos/$GITHUB_REPOSITORY/releases | jq '.[0].upload_url' | tr -d \")
-          echo "Url: $URL"
-          echo "::set-output name=url::$URL"
-          VERSION=$(wget -qO- https://api.github.com/repos/$GITHUB_REPOSITORY/releases | jq '.[0].tag_name' | tr -d \"v)
-          echo "Version: $VERSION"
-          echo "::set-output name=version=$VERSION"
-
+ 
       - name: Upload Zip
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.release-data.outputs.url }}
+          upload_url: $(wget -qO- https://api.github.com/repos/$GITHUB_REPOSITORY/releases | jq '.[0].upload_url' | tr -d \")
           asset_path: $(ls -1 dist/SpaceWarp-*.zip | head -n 1)
-          asset_name: spacewarp-release-${{ steps.release-data.outputs.version }}.zip
+          asset_name: spacewarp-release-${{ steps.get-version.outputs.version }}.zip
           asset_content_type: application/zip
           
           
